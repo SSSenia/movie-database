@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { BehaviorSubject, Observable, of, switchMap } from 'rxjs';
+import { BehaviorSubject, catchError, EMPTY, Observable, of, switchMap } from 'rxjs';
 import { IActions } from 'src/app/shared/interfaces/account';
 import { IMovie, IPage } from 'src/app/shared/interfaces/movie';
 import { AccountsService } from 'src/app/shared/services/account.service';
@@ -16,6 +16,7 @@ export class MoviesDetailedPageComponent implements OnInit {
   actions$: BehaviorSubject<IActions> = this.accountService.getAction();
   responseNext$!: Observable<IPage>;
   responseMovie$!: Observable<IMovie>;
+  errorCatched: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -28,6 +29,10 @@ export class MoviesDetailedPageComponent implements OnInit {
     this.responseMovie$ = this.route.params.pipe(
       switchMap((params: Params) => {
         return this.moviesService.getMovie(params['id'])
+      }),
+      catchError(() => {
+        this.errorCatched = true;
+        return EMPTY;
       }));
     this.responseNext$ = this.actions$.pipe(
       switchMap((action: IActions) => {

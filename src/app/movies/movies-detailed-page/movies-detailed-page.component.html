@@ -1,21 +1,24 @@
-<div *ngIf="responseMovie$ | async as responseMovie">
-    <div class="bg-image" [ngStyle]="{'background-image': 'url(http://image.tmdb.org/t/p/w342'+responseMovie.backdrop_path}">
-    </div>
-    <div class="background-blur">
-    </div>
-    <div class="bg-text">
+<div *ngIf="!errorCatched; else error">
+    <div *ngIf="responseMovie$ | async as responseMovie; else loading">
+        <div class="bg-image"
+            [ngStyle]="{'background-image': 'url(http://image.tmdb.org/t/p/w342'+responseMovie.backdrop_path}">
+        </div>
+        <div class="background-blur">
+        </div>
+        <div class="bg-text">
             <div class="navigation" *ngIf="responseNext$ | async as nextPage">
                 <button class="back" (click)="back()">
                     <img class="back-img" src="../assets/img/Down.svg" alt="back">
                     Back<span class="desktop">&nbsp;to list</span>
                 </button>
-                <button class="next"  (click)="next(nextPage)">
+                <button class="next" (click)="next(nextPage)">
                     Next<span class="desktop">&nbsp;Movie</span>
                     <img class="next-img" src="../assets/img/Down.svg" alt="next">
                 </button>
             </div>
             <div class="wrapper">
-                <img class="poster" [src]="'http://image.tmdb.org/t/p/w342'+responseMovie.poster_path" alt="poster" onerror="this.src='../assets/img/placeholder.jpg';">
+                <img class="poster" [src]="'http://image.tmdb.org/t/p/w342'+responseMovie.poster_path" alt="poster"
+                    onerror="this.src='../assets/img/placeholder.jpg';">
                 <div class="info">
                     <div class="title">{{responseMovie.title}}</div>
                     <div class="bar">
@@ -34,14 +37,16 @@
                         <div class="property-value">{{responseMovie.release_date | date:'mediumDate'}}</div>
                     </div>
                 </div>
-                
-                <button class="changeStateFavorite" *ngIf="!accountService.isHaveMovieById(responseMovie.id); else favorite" (click)="changeStateFavorite(responseMovie)">
-                    <div class="favorite-text" >Add to favorite</div>
+
+                <button class="changeStateFavorite"
+                    *ngIf="!accountService.isHaveMovieById(responseMovie.id); else favorite"
+                    (click)="changeStateFavorite(responseMovie)">
+                    <div class="favorite-text">Add to favorite</div>
                     <img class="favorite-img" src="../assets/img/Star.svg">
                 </button>
                 <ng-template #favorite>
                     <button class="changeStateFavorite" (click)="changeStateFavorite(responseMovie)">
-                        <div class="favorite-text" >Delete from favorite</div>
+                        <div class="favorite-text">Delete from favorite</div>
                         <img class="favorite-img" src="../assets/img/StarFilled.svg">
                     </button>
                 </ng-template>
@@ -49,4 +54,14 @@
             <div class="title-mobile">{{responseMovie.title}}</div>
             <div class="overview-mobile">{{responseMovie.overview}}</div>
         </div>
+    </div>
 </div>
+
+<ng-template #loading>
+    <div class="loading">loading...</div>
+</ng-template>
+
+<ng-template #error>
+    <p class="error">This character does not exist</p>
+    <a class="goBack" [routerLink]="['/movies']">Go back</a>
+</ng-template>

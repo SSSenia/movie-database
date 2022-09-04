@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Params, Router, RouterLink } from '@angular/router';
-import { EMPTY, Observable, switchMap, tap } from 'rxjs';
+import { ActivatedRoute, Params, Router } from '@angular/router';
+import { catchError, EMPTY, Observable, switchMap, tap } from 'rxjs';
 import { IPage } from 'src/app/shared/interfaces/movie';
 import { AccountsService } from 'src/app/shared/services/account.service';
 import { MoviesService } from 'src/app/shared/services/movies.service';
@@ -15,6 +15,7 @@ export class MoviesListPageComponent implements OnInit {
   currentPage: number = 1;
   response$!: Observable<IPage>
   pages: number[] = [];
+  errorCatched: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -26,7 +27,7 @@ export class MoviesListPageComponent implements OnInit {
   ngOnInit(): void {
     this.response$ = this.route.queryParams.pipe(
       switchMap((params: Params) => {
-        if (!+params['page']) {
+        if (!+params['page'] || +params['page'] > 500 || +params['page'] < 1) {
           this.router.navigate(['movies'], { queryParams: { page: 1 } })
           return EMPTY;
         }
@@ -39,6 +40,10 @@ export class MoviesListPageComponent implements OnInit {
                 if (i > 0 && i <= list.total_pages) this.pages.push(i)
             })
           );
+      }),
+      catchError(() => {
+        this.errorCatched = true;
+        return EMPTY;
       })
     )
   }

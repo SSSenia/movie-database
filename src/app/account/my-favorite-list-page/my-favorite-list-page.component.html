@@ -2,9 +2,13 @@
     <div class="name-section">
         My favorite
     </div>
+    <div class="list-empty" *ngIf="!response.length">
+        No favorites yet there are...
+    </div>
     <div class="cards">
         <div class="card" *ngFor="let movie of response">
-            <img [src]="'http://image.tmdb.org/t/p/w342' + movie.poster_path" alt="poster" onerror="this.src='../assets/img/placeholder.jpg';">
+            <img [src]="'http://image.tmdb.org/t/p/w342' + movie.poster_path" alt="poster"
+                onerror="this.src='../assets/img/placeholder.jpg';">
             <div class="info">
                 <div class="title">
                     <a [routerLink]="['/movies', movie.id]">
@@ -20,5 +24,5 @@
     </div>
 </div>
 <ng-template #loading>
-    <div>Loading...</div>
+    <div class="loading">loading...</div>
 </ng-template>
