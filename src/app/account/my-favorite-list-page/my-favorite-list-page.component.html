@@ -1,0 +1,24 @@
+<div *ngIf="response$ | async as response; else loading">
+    <div class="name-section">
+        My favorite
+    </div>
+    <div class="cards">
+        <div class="card" *ngFor="let movie of response">
+            <img [src]="'http://image.tmdb.org/t/p/w342' + movie.poster_path" alt="poster" onerror="this.src='../assets/img/placeholder.jpg';">
+            <div class="info">
+                <div class="title">
+                    <a [routerLink]="['/movies', movie.id]">
+                        <p>{{movie.title}}</p>
+                    </a>
+                </div>
+                <button class="unfavorite" (click)="unfavorite(movie.id)">Unfavorite</button>
+                <div class="overview">
+                    <p>{{movie.overview}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<ng-template #loading>
+    <div>Loading...</div>
+</ng-template>

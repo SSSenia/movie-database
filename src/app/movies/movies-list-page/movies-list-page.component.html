@@ -1,0 +1,42 @@
+<div *ngIf="response$ | async as response; else loading">
+    <div class="name-section">
+        Lastest releases
+    </div>
+    <div class="cards">
+        <div class="card" *ngFor="let movie of response.results; index as i">
+            <a [routerLink]="['/movies', movie.id]" (click)="action(i)">
+                <img [src]="'http://image.tmdb.org/t/p/w342' + movie.poster_path" alt="poster" onerror="this.src='https://starwars-visualguide.com/assets/img/big-placeholder.jpg';">
+                <div class="name">
+                    <p>{{movie.title}}</p>
+                </div>
+                <div class="rate">{{movie.vote_average}}</div>
+            </a>
+        </div>
+    </div>
+    <nav>
+        <button [routerLink]="['/movies']" [queryParams]="{page: 1}" class="page First"
+            [disabled]="currentPage == 1">
+            First
+        </button>
+        <button [routerLink]="['/movies']" [queryParams]="{page: currentPage - 1}" class="page Prev"
+            [disabled]="currentPage <= 1">
+            Prev
+        </button>
+        <button [routerLink]="['/movies']" [queryParams]="{page: page}" class="page" *ngFor="let page of pages"
+            [disabled]="page == currentPage">
+            {{page <= currentPage-3 || page >= currentPage+3 ? '…' : page}}
+        </button>
+        <button [routerLink]="['/movies']" [queryParams]="{page: currentPage + 1}" class="page Next"
+            [disabled]="currentPage >= response.total_pages">
+            Next
+        </button>
+        <button [routerLink]="['/movies']" [queryParams]="{page: response.total_pages}" class="page Last"
+            [disabled]="currentPage == response.total_pages">
+            Last
+        </button>
+    </nav>
+</div>
+
+<ng-template #loading>
+    <div>Loading...</div>
+</ng-template>
