@@ -1,1 +1,46 @@
 /* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+body {
+    font-family: 'Roboto', sans-serif;
+    color: white;
+    background-color: #12373b;
+}
+
+button,
+a {
+    transition: all .1s ease-out;
+}
+
+.loading {
+    padding-top: 30px;
+    text-align: center;
+    margin: 0 3vmax;
+    font-size: 3vmax;
+    font-weight: 700;
+}
+
+.error {
+    padding-top: 30px;
+    text-align: center;
+    margin: 0 3vmax;
+    font-size: 3vmax;
+    font-weight: 700;
+}
+
+.goBack {
+    text-align: center;
+    display: block;
+    width: 150px;
+    margin: 30px auto auto auto;
+    padding: 10px;
+    font-size: 30px;
+    border-radius: 4px;
+    background-color: #1f5a61;
+    text-decoration: none;
+    color: rgb(255, 255, 255);
+
+    &:hover {
+        background-color: #143e42;
+    }
+}
