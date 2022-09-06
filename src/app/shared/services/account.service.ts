@@ -1,26 +1,37 @@
-import { Injectable } from '@angular/core';
-import { IMovie } from '../interfaces/movie';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Injectable, OnInit } from '@angular/core';
+import { IMovie, IPage } from '../interfaces/movie';
+import { BehaviorSubject, Observable, of, switchMap } from 'rxjs';
 import { IAction, IActions } from '../interfaces/account';
+import { MoviesService } from './movies.service';
+
+const DEFAULT_ACTION: IActions = {
+  last: {
+    page: 1,
+    movie: 0
+  },
+  next: {
+    page: 1,
+    movie: 0
+  }
+};
 
 @Injectable({
   providedIn: 'root'
 })
 export class AccountsService {
 
-  favoritesSubject: BehaviorSubject<IMovie[]> = new BehaviorSubject<IMovie[]>([]);
-  actionSubject: BehaviorSubject<IActions> = new BehaviorSubject<IActions>({
-    last: {
-      page: 1,
-      movie: 0
-    },
-    next: {
-      page: 1,
-      movie: 0
-    }
-  });
+  favoritesSubject: BehaviorSubject<IMovie[]>;
+  actionSubject: BehaviorSubject<IActions> = new BehaviorSubject<IActions>(DEFAULT_ACTION);
 
-  constructor() { }
+  constructor(
+    private moviesService: MoviesService
+  ) {
+    const raw = localStorage.getItem('favorites');
+    this.favoritesSubject = new BehaviorSubject<IMovie[]>(raw ? JSON.parse(raw) : []);
+    this.favoritesSubject.subscribe((array) => {
+      localStorage.setItem('favorites', JSON.stringify(array));
+    })
+  }
 
   changeAction(action: IAction) {
     if (action.movie >= 19)
@@ -47,6 +58,28 @@ export class AccountsService {
     return this.actionSubject;
   }
 
+  setDefaultAction() {
+    this.actionSubject.next(DEFAULT_ACTION);
+  }
+
+  getNextMovie() {
+    return this.actionSubject.pipe(
+      switchMap((action: IActions) => {
+        console.log(action.next.page);
+
+        return this.moviesService.getPage(action.next.page)
+      }),
+      switchMap((page: IPage) => {
+        if (page.total_pages == page.page
+          && this.actionSubject.getValue().last.movie == page.results.length - 1) {
+          this.setDefaultAction();
+          return this.moviesService.getPage(1);
+        }
+        return of(page);
+      })
+    )
+  }
+
   changeStateMovie(movie: IMovie) {
     if (this.favoritesSubject.getValue().find(x => x.id == movie.id)) {
       this.favoritesSubject.next(this.favoritesSubject.getValue().filter(x => x.id != movie.id));
@@ -56,10 +89,6 @@ export class AccountsService {
       favorites.unshift(movie);
       this.favoritesSubject.next(favorites);
     }
-  }
-
-  isHaveMovieById(id: number): boolean {
-    return !!this.favoritesSubject.getValue().find(x => x.id == id);
   }
 
   getAll(): Observable<IMovie[]> {

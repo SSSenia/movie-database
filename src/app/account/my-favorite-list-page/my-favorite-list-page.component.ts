@@ -18,6 +18,7 @@ export class MyFavoriteListPageComponent implements OnInit {
 
   ngOnInit(): void {
     this.response$ = this.accountService.getAll();
+    this.accountService.setDefaultAction();
   }
 
   unfavorite(id: number) {

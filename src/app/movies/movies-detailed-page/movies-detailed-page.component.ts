@@ -22,7 +22,7 @@ export class MoviesDetailedPageComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private moviesService: MoviesService,
-    public accountService: AccountsService
+    private accountService: AccountsService
   ) { }
 
   ngOnInit(): void {
@@ -34,19 +34,8 @@ export class MoviesDetailedPageComponent implements OnInit {
         this.errorCatched = true;
         return EMPTY;
       }));
-    this.responseNext$ = this.actions$.pipe(
-      switchMap((action: IActions) => {
-        return this.moviesService.getPage(action.next.page)
-      }),
-      switchMap((page: IPage) => {
-        if (page.total_pages == page.page
-          && this.actions$.getValue().last.movie == page.results.length - 1) {
-          this.accountService.changeAction({ page: 1, movie: -1 });
-          return this.moviesService.getPage(1);
-        }
-        return of(page);
-      })
-    )
+
+    this.responseNext$ = this.accountService.getNextMovie();
   }
 
   changeStateFavorite(movie: IMovie) {
