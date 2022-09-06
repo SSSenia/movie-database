@@ -38,16 +38,15 @@
                     </div>
                 </div>
 
-                <button class="changeStateFavorite"
-                    *ngIf="!accountService.isHaveMovieById(responseMovie.id); else favorite"
+                <button class="changeStateFavorite" *ngIf="responseMovie.id | isHasMovie | async; else favorite"
                     (click)="changeStateFavorite(responseMovie)">
-                    <div class="favorite-text">Add to favorite</div>
-                    <img class="favorite-img" src="../assets/img/Star.svg">
+                    <div class="favorite-text">Delete from favorite</div>
+                    <img class="favorite-img" src="../assets/img/StarFilled.svg">
                 </button>
                 <ng-template #favorite>
                     <button class="changeStateFavorite" (click)="changeStateFavorite(responseMovie)">
-                        <div class="favorite-text">Delete from favorite</div>
-                        <img class="favorite-img" src="../assets/img/StarFilled.svg">
+                        <div class="favorite-text">Add to favorite</div>
+                        <img class="favorite-img" src="../assets/img/Star.svg">
                     </button>
                 </ng-template>
             </div>

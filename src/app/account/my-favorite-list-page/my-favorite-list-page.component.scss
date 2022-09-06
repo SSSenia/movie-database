@@ -1,3 +1,9 @@
+@mixin max-screen($res) {
+    @media screen and (max-width: $res) {
+        @content;
+    }
+}
+
 .name-section {
     padding-top: 30px;
     margin: 0 3vmax;
@@ -19,7 +25,7 @@
         position: relative;
         grid-template-columns: 342px 1fr;
 
-        @media only screen and (max-width: 684px) {
+        @include max-screen(684px) {
             grid-template-columns: 50% 50%;
         }
 
@@ -52,7 +58,7 @@
                 font-size: 30px;
             }
 
-            @media only screen and (max-width: 1200px) {
+            @include max-screen(1200px) {
                 .title {
                     font-size: 4vw;
                     margin-bottom: 0;
@@ -78,7 +84,7 @@
     color: white;
     border-radius: 5px;
 
-    @media only screen and (max-width: 684px) {
+    @include max-screen(684px) {
         position: relative;
         margin: 1vw;
         padding: 0;

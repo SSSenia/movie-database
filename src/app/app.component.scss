@@ -1,3 +1,9 @@
+@mixin max-screen($res) {
+    @media screen and (max-width: $res) {
+        @content;
+    }
+}
+
 header {
     position: fixed;
     left: 0;
@@ -43,7 +49,7 @@ header {
             }
 
             div {
-                @media only screen and (max-width: 500px) {
+                @include max-screen(500px) {
                     display: none;
                 }
 
