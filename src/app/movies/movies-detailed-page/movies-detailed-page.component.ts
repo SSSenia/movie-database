@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { BehaviorSubject, catchError, EMPTY, Observable, of, switchMap } from 'rxjs';
+import { BehaviorSubject, catchError, EMPTY, Observable, switchMap } from 'rxjs';
 import { IActions } from 'src/app/shared/interfaces/account';
 import { IMovie, IPage } from 'src/app/shared/interfaces/movie';
 import { AccountsService } from 'src/app/shared/services/account.service';

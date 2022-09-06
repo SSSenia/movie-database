@@ -1,4 +1,4 @@
-import { Injectable, OnInit } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { IMovie, IPage } from '../interfaces/movie';
 import { BehaviorSubject, Observable, of, switchMap } from 'rxjs';
 import { IAction, IActions } from '../interfaces/account';
@@ -65,8 +65,6 @@ export class AccountsService {
   getNextMovie() {
     return this.actionSubject.pipe(
       switchMap((action: IActions) => {
-        console.log(action.next.page);
-
         return this.moviesService.getPage(action.next.page)
       }),
       switchMap((page: IPage) => {

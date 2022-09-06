@@ -6,7 +6,7 @@ import { IsHasMoviePipe } from './pipes/is-has-movie.pipe';
   declarations: [
     IsHasMoviePipe
   ],
-  exports:[
+  exports: [
     CommonModule,
     IsHasMoviePipe
   ],

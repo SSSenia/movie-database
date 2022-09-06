@@ -38,8 +38,7 @@
                     </div>
                 </div>
 
-                <button class="changeStateFavorite"
-                    *ngIf="responseMovie.id | isHasMovie | async; else favorite"
+                <button class="changeStateFavorite" *ngIf="responseMovie.id | isHasMovie | async; else favorite"
                     (click)="changeStateFavorite(responseMovie)">
                     <div class="favorite-text">Delete from favorite</div>
                     <img class="favorite-img" src="../assets/img/StarFilled.svg">
